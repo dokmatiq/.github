@@ -33,7 +33,7 @@ We provide official SDKs with fluent builder APIs, typed models, automatic retri
 
 <table>
 <tr>
-<td align="center" width="25%">
+<td align="center" width="20%">
 
 ### Python
 `pip install dokmatiq-docgen`
@@ -46,7 +46,7 @@ pdf = dg.html_to_pdf("<h1>Hello!</h1>")
 ```
 
 </td>
-<td align="center" width="25%">
+<td align="center" width="20%">
 
 ### TypeScript
 `npm install @dokmatiq/docgen`
@@ -59,7 +59,7 @@ const pdf = await dg.htmlToPdf("<h1>Hello!</h1>");
 ```
 
 </td>
-<td align="center" width="25%">
+<td align="center" width="20%">
 
 ### Java
 Maven: `com.dokmatiq:docgen-sdk`
@@ -70,7 +70,20 @@ byte[] pdf = dg.htmlToPdf("<h1>Hello!</h1>");
 ```
 
 </td>
-<td align="center" width="25%">
+<td align="center" width="20%">
+
+### C# / .NET
+`dotnet add package Dokmatiq.DocGen`
+
+```csharp
+using Dokmatiq.DocGen;
+
+using var dg = new DocGenClient("your-api-key");
+byte[] pdf = dg.HtmlToPdf("<h1>Hello!</h1>");
+```
+
+</td>
+<td align="center" width="20%">
 
 ### PHP
 `composer require dokmatiq/docgen-sdk`
@@ -197,6 +210,9 @@ npm install @dokmatiq/docgen
 
 # Java (Maven)
 # Add com.dokmatiq:docgen-sdk to your pom.xml
+
+# C# / .NET
+dotnet add package Dokmatiq.DocGen
 
 # PHP
 composer require dokmatiq/docgen-sdk
