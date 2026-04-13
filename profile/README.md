@@ -1,12 +1,12 @@
 # Dokmatiq
 
-**Professional document generation as a service.** Convert HTML, Markdown, and templates into pixel-perfect PDFs, DOCX, and e-invoices -- with a single API call.
+**Professional document and spreadsheet generation as a service.** Convert HTML, Markdown, and templates into pixel-perfect PDFs, DOCX, e-invoices, and Excel workbooks -- with a single API call.
 
 ---
 
 ## What is DocGen?
 
-DocGen is a powerful document generation API built for developers who need reliable, high-quality document output at scale. Whether you're generating invoices, contracts, reports, or certificates -- DocGen handles the complexity so you can focus on your application.
+DocGen is a powerful document and spreadsheet generation API built for developers who need reliable, high-quality output at scale. Whether you're generating invoices, contracts, reports, data exports, or certificates -- DocGen handles the complexity so you can focus on your application.
 
 ### Core Capabilities
 
@@ -19,6 +19,8 @@ DocGen is a powerful document generation API built for developers who need relia
 | **PDF Forms** | Inspect and fill PDF form fields programmatically |
 | **ZUGFeRD / Factur-X** | Embed and extract structured invoice data in PDF invoices (EN16931, XRechnung) |
 | **XRechnung** | Generate, parse, validate, and transform e-invoices (CII and UBL formats) |
+| **Excel Generation** | Create styled XLSX workbooks from JSON, CSV, or templates -- with formulas, freeze panes, print areas, and cell styling |
+| **Excel Conversion** | Convert between XLSX, CSV, and JSON; fill Excel templates with data |
 | **Watermarks & Stationery** | Add text watermarks and PDF letterhead backgrounds |
 | **Preview** | Render PDF pages as PNG images for thumbnail generation |
 | **Async Processing** | Long-running jobs with polling and webhook callbacks |
@@ -130,6 +132,43 @@ zugferd_pdf = dg.zugferd.embed("invoice.pdf", invoice)
 
 # Generate XRechnung XML
 xrechnung_xml = dg.xrechnung.generate(invoice)
+```
+
+---
+
+## Excel Workbook Generation
+
+Create fully styled Excel workbooks programmatically -- or convert between CSV, JSON, and XLSX:
+
+```python
+# Generate a styled workbook from structured data
+xlsx = dg.excel.generate({
+    "sheets": [{
+        "name": "Sales Q1",
+        "columns": [
+            {"header": "Product", "width": 25},
+            {"header": "Revenue", "width": 15, "format": "#,##0.00 €"},
+        ],
+        "rows": [
+            {"values": ["Widget", 12500.50]},
+            {"values": ["Gadget", 8300.00]},
+        ],
+        "formulas": [
+            {"cell": "B4", "formula": "SUM(B2:B3)", "label": "Total"}
+        ],
+        "freezePane": {"row": 1, "col": 0},
+        "autoFilter": True,
+    }]
+})
+
+# Quick CSV → Excel conversion
+xlsx = dg.excel.from_csv(csv_data, has_header=True)
+
+# Extract Excel data as JSON
+data = dg.excel.to_json(excel_base64)
+
+# Fill an existing Excel template
+xlsx = dg.excel.fill_template(template_base64, values={"B2": "Q1 2026"})
 ```
 
 ---
