@@ -21,6 +21,7 @@ DocGen is a powerful document and spreadsheet generation API built for developer
 | **XRechnung** | Generate, parse, validate, and transform e-invoices (CII and UBL formats) |
 | **Excel Generation** | Create styled XLSX workbooks from JSON, CSV, or templates -- with formulas, freeze panes, print areas, and cell styling |
 | **Excel Conversion** | Convert between XLSX, CSV, and JSON; fill Excel templates with data |
+| **Receipt Recognition** | AI-powered extraction of receipts and invoices to structured JSON with SKR03/04 account mapping and DATEV export |
 | **Watermarks & Stationery** | Add text watermarks and PDF letterhead backgrounds |
 | **Preview** | Render PDF pages as PNG images for thumbnail generation |
 | **Async Processing** | Long-running jobs with polling and webhook callbacks |
@@ -183,6 +184,34 @@ data = dg.excel.to_json(excel_base64)
 # Fill an existing Excel template
 xlsx = dg.excel.fill_template(template_base64, values={"B2": "Q1 2026"})
 ```
+
+---
+
+## Receipt Recognition (AI-Powered)
+
+Extract structured data from receipt and invoice images -- with automatic SKR03/04 account mapping, multi-currency support, and DATEV-compatible export:
+
+```python
+# Extract receipt data from an image
+result = dg.receipts.extract("receipt.jpg")
+
+print(result["vendor"])          # "REWE Markt GmbH"
+print(result["total"])           # {"gross": 23.47, "net": 21.56, "vat": 1.91}
+print(result["currency"])        # "EUR"
+print(result["skr03Account"])    # "4650"
+print(result["category"])        # "Bewirtung"
+print(result["lineItems"])       # [{description, quantity, unitPrice, total}, ...]
+print(result["confidence"])      # 0.95
+
+# Async extraction for large batches
+job = dg.receipts.extract_async("receipt.jpg")
+result = dg.receipts.wait_for(job["jobId"])
+
+# Export as DATEV-compatible CSV
+csv = dg.receipts.export_datev([result])
+```
+
+**Extracted fields:** vendor, date, total (gross/net/VAT per rate), currency, payment method, line items, SKR03/04 account, category, tax ID, and quality confidence score.
 
 ---
 
